@@ -1585,6 +1585,32 @@ local function logSchematicTable(schematic_table)
   end
   ]]
 ------------------------------------START LUA2MTS MAIN-----------------------------------------
+
+local function replaceTextInFile(file_path)
+	-- Read the file content
+	local file = io.open(file_path, "r")
+	if file then
+	  local content = file:read("*all")
+	  file:close()
+  
+	  -- Replace "schematic =" with "return" at the beginning of the content
+	  local modified_content = content:gsub("^schematic =", "return")
+  
+	  -- Write the modified content back to the file
+	  file = io.open(file_path.."return", "w")
+	  if file then
+		file:write(modified_content)
+		file:close()
+	  else
+		minetest.log("error", "Failed to open the file for writing: " .. file_path)
+	  end
+	else
+	  minetest.log("error", "Failed to open the file for reading: " .. file_path)
+	end
+  end
+  
+
+
 local mts_save = function(fname, schematic)
 	local s = minetest.serialize_schematic(schematic, "mts", {})
 	if not s then
@@ -1616,7 +1642,8 @@ minetest.register_chatcommand("lua2mts", {
 		end
 
 		local lua_path = export_path_full .. DIR_DELIM .. lua_file .. ".lua"
-		local load_func, err = loadfile(lua_path)--.." return(schematic)"
+		replaceTextInFile(lua_path)
+		local load_func, err = loadfile(lua_path.."return")--.." return(schematic)"
 		if not load_func then
 			return false, S("Failed to load Lua file: ") .. err
 		end
