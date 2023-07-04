@@ -23,6 +23,7 @@ It also adds these server commands:
 
 * `placeschem` to place a schematic
 * `mts2lua` to convert .mts files to .lua files (Lua code)
+* `lua2mts` to convert .lua files to .mts files (Lua code)  NOTE: YOU MUST REPLACE "schematic =" with "return" at the beginning of the file for this to work.
 
 There's also a setting `schemedit_export_lua` to enable automatic export to .lua files.
 

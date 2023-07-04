@@ -1,4 +1,5 @@
 ## Usage help
+* `lua2mts` to convert .lua files to .mts files (Lua code)  NOTE: YOU MUST REPLACE "schematic =" with "return" at the beginning of the file for this to work.
 In this section you'll learn how to use the items of this mod.
 Note: If you have the `doc` and `doc_items` mods installed, you can also access the same help texts in-game (possibly translated).
 
