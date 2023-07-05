@@ -1586,18 +1586,18 @@ local function logSchematicTable(schematic_table)
   ]]
 ------------------------------------START LUA2MTS MAIN-----------------------------------------
 
-local function replaceTextInFile(file_path)
+local function replaceTextInFile(file_path, string_to_replace, replacement, modified_file_suffix)
 	-- Read the file content
 	local file = io.open(file_path, "r")
 	if file then
 	  local content = file:read("*all")
 	  file:close()
   
-	  -- Replace "schematic =" with "return" at the beginning of the content
-	  local modified_content = content:gsub("^schematic =", "return")
+	  -- Replace string_to_replace with replacement
+	  local modified_content = content:gsub(string_to_replace, replacement)
   
 	  -- Write the modified content back to the file
-	  file = io.open(file_path.."return", "w")
+	  file = io.open(file_path..modified_file_suffix, "w")
 	  if file then
 		file:write(modified_content)
 		file:close()
@@ -1642,8 +1642,9 @@ minetest.register_chatcommand("lua2mts", {
 		end
 
 		local lua_path = export_path_full .. DIR_DELIM .. lua_file .. ".lua"
-		replaceTextInFile(lua_path)
-		local load_func, err = loadfile(lua_path.."return")--.." return(schematic)"
+		modified_file_suffix = "_return"
+		replaceTextInFile(lua_path, "^schematic =", "return", modified_file_suffix )
+		local load_func, err = loadfile(lua_path..modified_file_suffix)
 		if not load_func then
 			return false, S("Failed to load Lua file: ") .. err
 		end
