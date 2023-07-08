@@ -1585,6 +1585,16 @@ local function logSchematicTable(schematic_table)
   end
   ]]
 ------------------------------------START LUA2MTS MAIN-----------------------------------------
+local function loadSchematic(path)
+    local env, file = {}, io.open(path)
+    local func = loadstring(file:read("*a"))
+
+    setfenv(func, env)
+    func()
+    file:close()
+
+    return env.schematic
+end
 
 local function replaceTextInFile(file_path, string_to_replace, replacement, modified_file_suffix)
 	-- Read the file content
